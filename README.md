@@ -35,10 +35,13 @@ git-exercise/
 ├── tools/
 │   ├── selftest.js         引擎全流程自检（node tools/selftest.js）
 │   └── dom-smoke.js        页面脚本渲染自检（node tools/dom-smoke.js）
+├── .gitattributes          统一 LF 换行符，避免“整文件假改动”
 └── .gitignore
 ```
 
-注意：这个文件夹目前**故意没有初始化成 Git 仓库**，因为「`git init`」本身就是第一课。练完第 1 关，你就知道该在哪儿执行它了。
+这个文件夹已经是一个真正的 Git 仓库，并且已经推送到了
+[github.com/xiaoxin-in/xiaoxin-github](https://github.com/xiaoxin-in/xiaoxin-github)（远程名 `origin`）。
+如果你还想亲手体验一次 `git init`，另建一个空文件夹去练，不要在这里重复初始化。
 
 ## 练习台支持的命令
 

@@ -5,6 +5,7 @@
 怎么用：一节一节往下做，每节末尾有「检查点」。做错了不要紧 —— 这正是练习的意义，撤销的办法也写在清单里了。
 
 > 所有命令都在这个项目的根目录（`git-exercise/`）里执行，不要在 `practice/` 子目录里另外 `git init`。
+> 这个仓库已经初始化好、也已经推送到 GitHub 了，所以下面第 1、2 节的重点是「观察并理解」，第 9 节的远程配置也已经完成，你照着念一遍命令、看看输出即可。
 
 ---
 
@@ -29,51 +30,59 @@ git config --list --show-origin
 
 ---
 
-## 1. 把文件夹变成仓库
+## 1. 认识这个仓库
+
+这个文件夹已经是 Git 仓库了，先「观察」：
 
 ```bash
-git init
 git status
-```
-
-你会看到 Git 列出目录里的所有文件，全部标着 `Untracked`（未跟踪）—— 意思是「我看见了它们，但还没开始管」。
-
-顺带看一眼这个隐藏目录：
-
-```bash
-ls -Force      # Windows PowerShell
+git log --oneline --graph
+ls -Force      # Windows PowerShell，看隐藏的 .git 目录
 ls -a          # Git Bash / macOS
 ```
 
 `.git` 就是仓库本体，所有历史都存在里面。**删掉它，这个文件夹就和 Git 无关了。**
 
-**检查点**：`git status` 说 `On branch main`，并且 `No commits yet`。
+想亲手体验一次「从零开始」的感觉，另开一个空文件夹（别在这个仓库里做）：
+
+```bash
+mkdir ../git-init-demo
+cd ../git-init-demo
+git init
+git status
+```
+
+新建的目录里，`git status` 会先告诉你 `No commits yet`，文件全部标着 `Untracked`（未跟踪）—— 意思是「我看见了它们，但还没开始管」。体验完 `cd -` 回到本仓库就行。
+
+**检查点**：你能说清楚「仓库 = 项目文件夹 + 隐藏的 .git 目录」。
 
 ---
 
-## 2. 第一次提交
+## 2. 提交自己的第一笔改动
+
+仓库里已经有一次初始提交了（`git log` 能看到）。现在动手做一个属于你的提交：
 
 ```bash
-git add README.md
-git status
-git commit -m "项目说明：Git 练习台"
+# 编辑 practice/todo.md，把某个 [ ] 改成 [x]
+git status                       # 看到 practice/todo.md 被修改
+git diff                         # 看具体改了哪一行
+git add practice/todo.md
+git status                       # 这时它在「Changes to be committed」里
+git commit -m "勾掉一项待办"
 git log --oneline
 ```
 
-`git add` 把文件放进**暂存区**，`git commit` 把暂存区固化成**提交**。
-
-一次把剩下的都加进去，再提交一次，体会「分批提交」的意思：
+体会一下「分批提交」的意思：先只提交 todo.md，再改点别的单独提交一次。
 
 ```bash
-git add .gitignore index.html assets
-git commit -m "加入练习台页面与样式"
-git add practice docs
-git commit -m "补充真实命令练习材料"
+# 再编辑 practice/quote.txt
+git add practice/quote.txt
+git commit -m "换一句座右铭"
 ```
 
-**检查点**：`git log --oneline` 能看到 3 条提交，每条前面有一段提交号。
+**检查点**：`git log --oneline` 最上面两条是你自己刚写的提交说明。
 
-**常见坑**：只改了文件却忘了 `git add`，`commit` 会说 `nothing to commit`；这时候补一次 `git add` 就好。
+**常见坑**：只改了文件却忘了 `git add`，`commit` 会说 `nothing to commit`；这时候补一次 `git add` 就好。想撤销一次 `git add`，用 `git restore --staged <文件>`。
 
 ---
 
@@ -253,22 +262,33 @@ git log --oneline --graph --all
 
 ## 9. 连接 GitHub
 
-先在 GitHub 上点 **New repository** 建一个空仓库（**不要**勾选 "Add a README file"，否则第一次 push 会冲突）。
-
-然后把本地和它接起来：
+这一步在本仓库里**已经做完了**，你照着念一遍、看看输出即可：
 
 ```bash
-git remote add origin https://github.com/你的名字/git-exercise.git
 git remote -v
-git branch -M main
-git push -u origin main
+git branch -vv              # 看 main 跟踪的是哪个远程分支
+git log --oneline -1 origin/main
 ```
 
-`-u` 的意思是「记住这个对应关系」，以后在这个分支上直接 `git push` / `git pull` 就行。
+当初用的命令是这三条，换成你自己的仓库地址就是同一套流程：
+
+```bash
+git remote add origin https://github.com/你的名字/仓库名.git
+git branch -M main
+git push -u origin main     # -u 记住对应关系，以后直接 git push / git pull
+```
+
+新建 GitHub 仓库时**不要**勾选 "Add a README file"，否则第一次 push 会因为远程已有提交而被拒绝。
+
+以后再改点东西，推送就是一个字：
+
+```bash
+git push
+```
 
 如果提示要密码：GitHub 早就不接受账号密码了，请使用 **Personal Access Token**（Settings → Developer settings → Personal access tokens）或者配置 SSH key。
 
-**检查点**：刷新 GitHub 页面，能看到你所有的提交和文件。
+**检查点**：刷新 [仓库页面](https://github.com/xiaoxin-in/xiaoxin-github)，能看到你刚在本地做的提交。
 
 ---
 

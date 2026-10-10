@@ -1,0 +1,16 @@
+# 依赖与构建产物（本项目零依赖，通常用不到）
+node_modules/
+dist/
+build/
+
+# 编辑器与系统文件
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 练习过程中可能产生的临时文件
+*.log
+*.tmp
+practice/scratch/

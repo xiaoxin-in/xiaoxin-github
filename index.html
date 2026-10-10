@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Git 练习台 · 可视化练习 Git 与 GitHub</title>
+<meta name="description" content="在浏览器里练习 Git 和 GitHub：三区视图、提交图、终端模拟和闯关任务，零依赖、离线可用。">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">⌥</span>
+    <div>
+      <h1>Git 练习台</h1>
+      <p class="subtitle">在浏览器里把 Git 的内部状态画出来，边敲边学</p>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span id="status-pill" class="pill good">尚未初始化仓库</span>
+    <button id="btn-undo" class="btn" type="button">撤销上一步</button>
+    <button id="btn-help" class="btn" type="button">命令帮助</button>
+    <button id="btn-reset" class="btn" type="button">重置练习</button>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- 左列：工作区 / 暂存区 / 仓库 -->
+  <section class="col">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>工作区</h2>
+        <span class="panel-note">working directory</span>
+      </div>
+      <p class="panel-desc">点文件名就能像记事本一样改内容。改完去终端 add + commit。</p>
+      <div id="files-list" class="filelist"></div>
+      <div class="rowform">
+        <input id="newfile-input" class="textinput" type="text" placeholder="新建文件名，如 docs/todo.md">
+        <button id="newfile-btn" class="btn" type="button">新建</button>
+      </div>
+      <div id="editor-panel" class="editor" hidden>
+        <div class="editor-head">
+          <span id="editor-title" class="editor-title">文件</span>
+          <div class="editor-actions">
+            <button id="editor-save" class="btn btn-primary btn-small" type="button">保存</button>
+            <button id="editor-cancel" class="btn btn-small" type="button">关闭</button>
+          </div>
+        </div>
+        <textarea id="editor-textarea" class="editor-area" spellcheck="false"></textarea>
+        <p class="panel-note">保存 = 修改工作区文件（还没提交，也还没 add）</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>暂存区</h2>
+        <span class="panel-note">staging / index</span>
+      </div>
+      <p class="panel-desc">git add 过、但还没 commit 的改动会停在这里。</p>
+      <div id="index-list" class="filelist"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>仓库</h2>
+        <span class="panel-note">repository</span>
+      </div>
+      <div id="repo-info" class="info"></div>
+    </div>
+  </section>
+
+  <!-- 中列：提交图 + 远程 -->
+  <section class="col col-wide">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>提交图</h2>
+        <span class="panel-note">每条泳道是一个分支，圆点是提交，方块是合并提交</span>
+      </div>
+      <div id="graph-wrap" class="graph-wrap"></div>
+      <div id="graph-legend" class="legend"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>远程仓库</h2>
+        <span class="panel-note">GitHub 上的那份副本</span>
+      </div>
+      <div id="remote-panel"></div>
+    </div>
+  </section>
+
+  <!-- 右列：终端 + 关卡 -->
+  <section class="col">
+    <div class="panel panel-terminal">
+      <div class="panel-head">
+        <h2>终端</h2>
+        <span class="panel-note">在这里敲 git 命令</span>
+      </div>
+      <div id="term-output" class="term-output" aria-live="polite"></div>
+      <form id="term-form" class="term-form" autocomplete="off">
+        <span class="term-prompt">
+          <span class="prompt-user">you@practice</span>:<span id="prompt-path">~/git-exercise</span>$
+        </span>
+        <input id="term-input" class="term-input" type="text" spellcheck="false"
+               aria-label="输入 git 命令" placeholder="git init">
+        <button class="btn btn-primary btn-small" type="submit">执行</button>
+      </form>
+      <p class="panel-note">↑ / ↓ 翻历史命令，Tab 补全。输入 help 看支持的命令。</p>
+      <div id="cheats" class="chips"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>闯关任务</h2>
+        <span id="tasks-progress-text" class="panel-note">0 / 0 关</span>
+      </div>
+      <div id="tasks-progress" class="progress" role="progressbar" aria-label="关卡完成进度"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div id="tasks-progress-bar" class="progress-bar" style="width:0%"></div>
+      </div>
+      <div id="tasks-list" class="tasks"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>练习台是纯前端模拟：所有操作只发生在这个页面里，不会动到真实文件，也不联网。</p>
+  <p>想练真实命令？照着 <code>docs/practice-plan.md</code> 在这个文件夹里一步步来，<code>practice/</code> 里是专门给你改着玩的小文件。</p>
+</footer>
+
+<script src="assets/git-engine.js"></script>
+<script src="assets/tasks.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

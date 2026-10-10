@@ -1,0 +1,11 @@
+# 统一使用 LF 换行符：避免 Windows / macOS 协作时出现“整个文件都变了”的假改动
+* text=auto eol=lf
+
+# 二进制文件不做换行转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
